@@ -28,7 +28,7 @@ func login(w http.ResponseWriter, r *http.Request) {
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.username, &user.mail, &user.password, &user.session)
+      err := rows.Scan(&user.username, &user.mail, &user.password, &user.index)
       if err != nil{
         fmt.Println("can't load pupils")
       }
@@ -37,6 +37,7 @@ func login(w http.ResponseWriter, r *http.Request) {
         session.Values["authenticated"] = true
         session.Save(r, w)
         t.Execute(w, &Page{Username: user.username})
+        //вот тут надо поставить user в куки и перенаправить в secret
         break
       }
     }
