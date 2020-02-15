@@ -49,6 +49,7 @@ func main() {
   http.HandleFunc("/logout", logout)
   http.HandleFunc("/register", register)
   http.HandleFunc("/index", index)
+  http.HandleFunc("/", root)
   http.Handle("/js/",http.StripPrefix("/js/", http.FileServer(http.Dir("./scripts"))))
 
   http.ListenAndServe(":8080", nil)

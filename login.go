@@ -13,7 +13,7 @@ type Page struct{
 
 func login(w http.ResponseWriter, r *http.Request) {
   if r.Method == "POST"{
-    t := template.Must(template.ParseFiles("pages/index.html"))
+    //t := template.Must(template.ParseFiles("pages/index.html"))
     user := pupil{}
 
     session, _ := store.Get(r, "cookie-name")
@@ -35,9 +35,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 
       if (user.username == r.FormValue("username") && user.password == GetMd5(r.FormValue("password"))){
         session.Values["authenticated"] = true
+        session.Values["user"] = user.username
+        //fmt.Println(session.Values["user"])
         session.Save(r, w)
-        t.Execute(w, &Page{Username: user.username})
-        //вот тут надо поставить user в куки и перенаправить в secret
+        //t.Execute(w, &Page{Username: user.username})
+        http.Redirect(w,r, "/", 301)
         break
       }
     }

@@ -6,8 +6,6 @@ import(
   _ "github.com/lib/pq"
   "html/template"
   "net/smtp"
-  "net"
-  "crypto/tls"
   "log"
 )
 
@@ -45,7 +43,7 @@ func register(w http.ResponseWriter, r *http.Request){
 
     _, err = db.Exec("insert into school_users (username, mail, password, index) values ('"+r.FormValue("username")+"','"+r.FormValue("mail")+"','"+GetMd5(r.FormValue("password"))+"','"+GetMd5(r.FormValue("username"))+"');")
     //тут нужно подтвердить по почте
-    go sendMail(r.FormValue("mail"))
+    go sendMail(r.FormValue("mail"), GetMd5(r.FormValue("username")))
     if err != nil {
       fmt.Println("can not insert into the table")
     }
@@ -54,7 +52,7 @@ func register(w http.ResponseWriter, r *http.Request){
   }
 }
 
-func sendMail(to string){
+func sendMail(to string, index string){
   // somecitee@gmail.com pidorasi
   /*auth := smtp.PlainAuth("", "somecitee@gmail.com", "pidorasi", "smtp.gmail.com")
   msg := []byte("To: "+mail+"\r\n" +
@@ -66,76 +64,20 @@ func sendMail(to string){
 	if err != nil {
 		fmt.Println(err)
 	}*/
-
   from := "somecitee@gmail.com"
-  subj := "This is the email subject"
-  body := "This is an example body.\n With two lines."
+	pass := "pidorasi"
 
-  // Setup headers
-  headers := make(map[string]string)
-  headers["From"] = from
-  headers["To"] = to
-  headers["Subject"] = subj
+	msg := "From: " + from + "\n" +
+		"To: " + to + "\n" +
+		"Subject: Hello there\n\n" +
+    "To confirm your email follow the link localhost:8080/index?index=" + index
 
-  // Setup message
-  message := ""
-  for k,v := range headers {
-      message += fmt.Sprintf("%s: %s\r\n", k, v)
-  }
-  message += "\r\n" + body
+	err := smtp.SendMail("smtp.gmail.com:587",
+		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
+		from, []string{to}, []byte(msg))
 
-  // Connect to the SMTP Server
-  servername := "smtp.gmail.com:465"
-
-  host, _, _ := net.SplitHostPort(servername)
-
-  auth := smtp.PlainAuth("","somecitee@gmail.com", "pidorasi", host)
-
-  // TLS config
-  tlsconfig := &tls.Config {
-      InsecureSkipVerify: true,
-      ServerName: host,
-  }
-
-  conn, err := tls.Dial("tcp", servername, tlsconfig)
-  if err != nil {
-      log.Panic(err)
-  }
-
-  c, err := smtp.NewClient(conn, host)
-  if err != nil {
-      log.Panic(err)
-  }
-
-  // Auth
-  if err = c.Auth(auth); err != nil {
-      log.Panic(err)
-  }
-
-  // To && From
-  if err = c.Mail(from); err != nil {
-      log.Panic(err)
-  }
-
-  if err = c.Rcpt(to); err != nil {
-      log.Panic(err)
-  }
-
-  // Data
-  w, err := c.Data()
-  if err != nil {
-      log.Panic(err)
-  }
-
-  _, err = w.Write([]byte(message))
-  if err != nil {
-      log.Panic(err)
-  }
-
-  err = w.Close()
-  if err != nil {
-      log.Panic(err)
-  }
-
-  c.Quit()
+	if err != nil {
+		log.Printf("smtp error: %s", err)
+		return
+	}
 }

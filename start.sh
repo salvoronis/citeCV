@@ -1,1 +1,1 @@
-go run main.go register.go login.go index.go
+go run main.go register.go login.go index.go root.go
