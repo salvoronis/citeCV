@@ -44,13 +44,14 @@ func GetMd5(text string) string {
 }
 
 func main() {
-  http.HandleFunc("/secret", secret)
+  http.HandleFunc("/profile", profile)
   http.HandleFunc("/login", login)
   http.HandleFunc("/logout", logout)
   http.HandleFunc("/register", register)
   http.HandleFunc("/index", index)
   http.HandleFunc("/", root)
   http.Handle("/js/",http.StripPrefix("/js/", http.FileServer(http.Dir("./scripts"))))
+  http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("./images"))))
 
   http.ListenAndServe(":8080", nil)
 }
