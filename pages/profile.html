@@ -4,9 +4,19 @@
     <meta charset="utf-8">
     <title>{{.Username}}</title>
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <style>
+      #file {
+        display:none;
+      }
+    </style>
   </head>
   <body>
-    <img src="/img/{{.File}}.jpg">
+    <label for="file">
+      <img height="200" width="200" id="avatar" src="/img/{{.File}}.jpg">
+      {{if .Edit}}
+        <input id="file" type="file" accept="image/jpeg">
+      {{end}}
+    </label>
     <p>username: {{.Username}}</p>
     <p>mail: {{.Mail}}</p>
     <p>class: 11И</p>
@@ -16,4 +26,5 @@
       <p>Подтверди почту, пидорас</p>
     {{end}}
   </body>
+  <script type="text/javascript" src="/js/profile.js"></script>
 </html>
