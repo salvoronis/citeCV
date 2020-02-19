@@ -51,6 +51,7 @@ func main() {
   http.HandleFunc("/index", index)
   http.HandleFunc("/", root)
   http.Handle("/js/",http.StripPrefix("/js/", http.FileServer(http.Dir("./scripts"))))
+  http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
   http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("./images"))))
 
   http.ListenAndServe(":8080", nil)
