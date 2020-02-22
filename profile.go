@@ -29,31 +29,31 @@ func profile(w http.ResponseWriter, r *http.Request){
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&object.username, &object.mail, &object.password, &object.index, &object.class)
+      err := rows.Scan(&object.Username, &object.Mail, &object.Password, &object.Index, &object.Class)
       if err != nil{
         fmt.Println("can't load pupils")
       }
     }
-    if object.index == "" {
+    if object.Index == "" {
       conf = true
     }
-    Sfile, err := os.Open("./images/"+object.username+".jpg")
+    Sfile, err := os.Open("./images/"+object.Username+".jpg")
     Sfile.Close();
     if err != nil {
       file = "_default"
     } else {
-      file = object.username
+      file = object.Username
     }
-    edit := object.username == session.Values["user"]
+    edit := object.Username == session.Values["user"].(*pupil).Username
 
-    t.Execute(w, &Profile{Username: object.username, Mail: object.mail, File: file, Confirm: conf, Edit: edit})
+    t.Execute(w, &Profile{Username: object.Username, Mail: object.Mail, File: file, Confirm: conf, Edit: edit})
   } else {
     f, _, err := r.FormFile("file")
     if err != nil {
       fmt.Println("image shit")
     }
     defer f.Close()
-    filename := "./images/" + session.Values["user"].(string) + ".jpg"
+    filename := "./images/" + session.Values["user"].(*pupil).Username + ".jpg"
     out, err := os.Create(filename)
     if err != nil {
       fmt.Println("another shit")

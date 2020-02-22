@@ -27,14 +27,14 @@ func login(w http.ResponseWriter, r *http.Request) {
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.username, &user.mail, &user.password, &user.index, &user.class)
+      err := rows.Scan(&user.Username, &user.Mail, &user.Password, &user.Index, &user.Class)
       if err != nil{
-        //fmt.Println("can't load pupils")
+        fmt.Println(err)
       }
 
-      if (user.username == r.FormValue("username") && user.password == GetMd5(r.FormValue("password"))){
+      if (user.Username == r.FormValue("username") && user.Password == GetMd5(r.FormValue("password"))){
         session.Values["authenticated"] = true
-        session.Values["user"] = user.username
+        session.Values["user"] = &user
         session.Save(r, w)
         http.Redirect(w,r, "/", 301)
         break
@@ -53,4 +53,5 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
   session.Values["authenticated"] = false
   session.Save(r, w)
+  http.Redirect(w,r, "/login", 301)
 }

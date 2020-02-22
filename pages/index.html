@@ -21,11 +21,12 @@
     </table>
   </body>
   <script type="text/javascript">
-  function timetable(){
+  var clas = {{.Class}}
+  function timetable(clas){
     $.ajax({
       url: '/gettimetable',
       dataType: 'text',
-      data: 'class=11И',
+      data: 'class='+clas+'',
       type: 'get',
       success: function(response){
         console.log(response);
@@ -33,6 +34,6 @@
       }
     });
   }
-  timetable();
+  timetable(clas);
   </script>
 </html>

@@ -9,14 +9,16 @@ import (
   "encoding/hex"
 
   "github.com/gorilla/sessions"
+  "encoding/gob"
 )
 
 type pupil struct{
-  username string
-  mail string
-  password string
-  index string
-  class string
+  Username string
+  Mail string
+  Password string
+  Index string
+  Class string
+  Auth bool
 }
 
 var (
@@ -26,6 +28,11 @@ var (
   connStr = "host=localhost port=5432 user=postgres password=qwerty dbname=postgres sslmode=disable"
   db, err = sql.Open("postgres", connStr)
 )
+
+func init(){
+  gob.Register(&pupil{})
+}
+
 
 func secret(w http.ResponseWriter, r *http.Request) {
   session, _ := store.Get(r, "cookie-name")

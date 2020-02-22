@@ -30,12 +30,12 @@ func register(w http.ResponseWriter, r *http.Request){
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.username, &user.password, &user.mail, &user.index, &user.class)
+      err := rows.Scan(&user.Username, &user.Password, &user.Mail, &user.Index, &user.Class)
       if err != nil{
         fmt.Println("can't load pupils")
       }
 
-      if (user.username == r.FormValue("username") || user.mail == r.FormValue("mail")){
+      if (user.Username == r.FormValue("username") || user.Mail == r.FormValue("mail")){
         t.Execute(w,&Page{Bad: "username or mail is already use",})
         return
       }
