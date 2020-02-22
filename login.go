@@ -13,7 +13,6 @@ type Page struct{
 
 func login(w http.ResponseWriter, r *http.Request) {
   if r.Method == "POST"{
-    //t := template.Must(template.ParseFiles("pages/index.html"))
     user := pupil{}
 
     session, _ := store.Get(r, "cookie-name")
@@ -28,17 +27,16 @@ func login(w http.ResponseWriter, r *http.Request) {
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.username, &user.mail, &user.password, &user.index)
+      err := rows.Scan(&user.username, &user.mail, &user.password, &user.index, &user.class)
       if err != nil{
-        fmt.Println("can't load pupils")
+        //fmt.Println("can't load pupils")
       }
 
       if (user.username == r.FormValue("username") && user.password == GetMd5(r.FormValue("password"))){
         session.Values["authenticated"] = true
         session.Values["user"] = user.username
-        //fmt.Println(session.Values["user"])
+        user.auth = true
         session.Save(r, w)
-        //t.Execute(w, &Page{Username: user.username})
         http.Redirect(w,r, "/", 301)
         break
       }

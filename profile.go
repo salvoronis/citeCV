@@ -29,7 +29,7 @@ func profile(w http.ResponseWriter, r *http.Request){
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&object.username, &object.mail, &object.password, &object.index)
+      err := rows.Scan(&object.username, &object.mail, &object.password, &object.index, &object.class)
       if err != nil{
         fmt.Println("can't load pupils")
       }

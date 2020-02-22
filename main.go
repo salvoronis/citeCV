@@ -16,6 +16,8 @@ type pupil struct{
   mail string
   password string
   index string
+  class string
+  auth bool
 }
 
 var (
@@ -49,6 +51,7 @@ func main() {
   http.HandleFunc("/logout", logout)
   http.HandleFunc("/register", register)
   http.HandleFunc("/index", index)
+  http.HandleFunc("/gettimetable", gettimetable)
   http.HandleFunc("/", root)
   http.Handle("/js/",http.StripPrefix("/js/", http.FileServer(http.Dir("./scripts"))))
   http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))

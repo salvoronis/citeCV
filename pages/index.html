@@ -10,5 +10,29 @@
   <body>
     <p>Hello, <a href="/profile?name={{.Username}}">{{.Username}}</a></p>
     <p><a href="/logout">Exit</a></p>
+    <table>
+      <tr id="header">
+        <th>Предмет</th>
+        <th>Время</th>
+        <th>Кабинет</th>
+        <th>Учитель</th>
+        <th>День недели</th>
+      </tr>
+    </table>
   </body>
+  <script type="text/javascript">
+  function timetable(){
+    $.ajax({
+      url: '/gettimetable',
+      dataType: 'text',
+      data: 'class=11И',
+      type: 'get',
+      success: function(response){
+        console.log(response);
+        $("#header").after(response);
+      }
+    });
+  }
+  timetable();
+  </script>
 </html>

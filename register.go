@@ -30,7 +30,7 @@ func register(w http.ResponseWriter, r *http.Request){
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.username, &user.password, &user.mail, &user.index)
+      err := rows.Scan(&user.username, &user.password, &user.mail, &user.index, &user.class)
       if err != nil{
         fmt.Println("can't load pupils")
       }
