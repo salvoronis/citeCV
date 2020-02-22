@@ -17,7 +17,6 @@ type pupil struct{
   password string
   index string
   class string
-  auth bool
 }
 
 var (

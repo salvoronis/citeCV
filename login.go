@@ -35,7 +35,6 @@ func login(w http.ResponseWriter, r *http.Request) {
       if (user.username == r.FormValue("username") && user.password == GetMd5(r.FormValue("password"))){
         session.Values["authenticated"] = true
         session.Values["user"] = user.username
-        user.auth = true
         session.Save(r, w)
         http.Redirect(w,r, "/", 301)
         break
