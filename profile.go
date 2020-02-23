@@ -34,7 +34,7 @@ func profile(w http.ResponseWriter, r *http.Request){
         fmt.Println("can't load pupils")
       }
     }
-    if object.Index == "" {
+    if object.Index == "ok" {
       conf = true
     }
     Sfile, err := os.Open("./images/"+object.Username+".jpg")
