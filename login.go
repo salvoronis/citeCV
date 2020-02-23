@@ -42,6 +42,7 @@ func login(w http.ResponseWriter, r *http.Request) {
     }
 
     session.Save(r, w)
+    http.Redirect(w,r, "/login", 301)
   } else if r.Method == "GET"{
     t := template.Must(template.ParseFiles("pages/login.html"))
     t.Execute(w, "")

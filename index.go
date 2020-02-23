@@ -22,7 +22,7 @@ func index(w http.ResponseWriter, r *http.Request){
       }
 
       if (user.Index == index){
-        _, err = db.Exec("update school_users set index = NULL where username = '"+user.Username+"';")
+        _, err = db.Exec("update school_users set index = 'ok' where username = '"+user.Username+"';")
         fmt.Fprint(w, "Подтверждено")
         if err != nil {
           fmt.Println("can not insert into the table")
