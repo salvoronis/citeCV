@@ -21,7 +21,6 @@ func gettimetable(w http.ResponseWriter, r *http.Request){
   var tabl string
   if r.Method == "GET"{
     week := r.FormValue("week")
-    fmt.Println(week)
     rows, err := db.Query("select * from \"timetable\" where class='"+student.Class+"';")
     if err != nil {
       fmt.Println("can not load class")
@@ -38,7 +37,9 @@ func gettimetable(w http.ResponseWriter, r *http.Request){
       } else{
         for gradeRow.Next(){
           err := gradeRow.Scan(&mark.Grade)
-          fmt.Println(err)
+          if err != nil {
+            fmt.Println(err)
+          }
         }
       }
       var result string = ""

@@ -9,15 +9,37 @@ import(
   "log"
 )
 
+type Classes struct{
+  Class string
+}
+
+type Page struct{
+  Bad string
+  Abc []string
+}
+
 func register(w http.ResponseWriter, r *http.Request){
   if r.Method == "GET"{
-    t := template.Must(template.ParseFiles("pages/register.html"))
-    t.Execute(w,"")
-  }else if r.Method == "POST" {
-    t := template.Must(template.ParseFiles("pages/register.html"))
-    type Page struct{
-      Bad string
+    //page := Page{}
+    var cl []string
+    classes := Classes{}
+    rows, err := db.Query("select class from \"timetable\" group by class;")
+    if err != nil {
+      fmt.Println(err)
     }
+    for rows.Next(){
+      err := rows.Scan(&classes.Class)
+      if err != nil {
+        fmt.Println(err)
+      }
+      cl = append(cl, classes.Class)
+      //page.Abc.append(classes.Class)
+      //fmt.Println(page.Abc)
+    }
+    t := template.Must(template.ParseFiles("pages/register.html"))
+    t.Execute(w, &Page{Abc: cl})
+  }else if r.Method == "POST" {
+    //t := template.Must(template.ParseFiles("pages/register.html"))
     user := pupil{}
 
     err := r.ParseMultipartForm(1024)
@@ -36,12 +58,13 @@ func register(w http.ResponseWriter, r *http.Request){
       }
 
       if (user.Username == r.FormValue("username") || user.Mail == r.FormValue("mail")){
-        t.Execute(w,&Page{Bad: "username or mail is already use",})
+        t := template.Must(template.ParseFiles("pages/register.html"))
+        t.Execute(w, &Page{Bad: "username or mail is already use",})
         return
       }
     }
 
-    _, err = db.Exec("insert into school_users (username, mail, password, index) values ('"+r.FormValue("username")+"','"+r.FormValue("mail")+"','"+GetMd5(r.FormValue("password"))+"','"+GetMd5(r.FormValue("username"))+"');")
+    _, err = db.Exec("insert into school_users (username, mail, password, index, class) values ('"+r.FormValue("username")+"','"+r.FormValue("mail")+"','"+GetMd5(r.FormValue("password"))+"','"+GetMd5(r.FormValue("username"))+"','"+r.FormValue("class")+"');")
     if err != nil {
       fmt.Println("can not insert into the table")
     }

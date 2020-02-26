@@ -33,7 +33,7 @@ func init(){
 }
 
 
-func secret(w http.ResponseWriter, r *http.Request) {
+/*func secret(w http.ResponseWriter, r *http.Request) {
   session, _ := store.Get(r, "cookie-name")
 
   if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
@@ -42,7 +42,7 @@ func secret(w http.ResponseWriter, r *http.Request) {
   }
 
   fmt.Fprintln(w, "The cake is a lie!")
-}
+}*/
 
 func GetMd5(text string) string {
   h := md5.New()

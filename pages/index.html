@@ -6,24 +6,50 @@
     <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/index.css">
   </head>
   <body>
-    <p>Hello, <a href="/profile?name={{.Username}}">{{.Username}}</a></p>
-    <p><a href="/logout">Exit</a></p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <a class="navbar-brand" href="/">Some shit</a>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+          <li class="nav-item dropdown active">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{.Username}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/profile?name={{.Username}}">Profile</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <p>
       <button type="button" id="prew"><</button>
-      <i>Номер недели <strong id="weekn"></strong></i>
+      <i>Week number <strong id="weekn"></strong></i>
       <button type="button" id="next">></button>
     </p>
-    <table>
-      <tr id="header">
-        <th>Subject</th>
-        <th>Time</th>
-        <th>Classroom</th>
-        <th>Teacher</th>
-        <th>Week day</th>
-        <th>Grade</th>
-      </tr>
+    <table id="allTable">
+      <thead>
+        <tr id="header">
+          <td>Subject</td>
+          <td>Time</td>
+          <td>Classroom</td>
+          <td>Teacher</td>
+          <td>Week day</td>
+          <td>Grade</td>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
     </table>
   </body>
   <script type="text/javascript" src="/js/index.js"></script>

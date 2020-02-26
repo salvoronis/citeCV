@@ -7,8 +7,7 @@ function timetable(week){
     data: 'week='+week,
     type: 'get',
     success: function(response){
-      console.log(response);
-      $("#header").html(response);
+      $("tbody").html(response);
     }
   });
 }

@@ -13,6 +13,12 @@
       <input type="password" name="password">
       <p>Mail</p>
       <input type="mail" name="mail">
+      <p>Class</p>
+      <select name="class">
+        {{range .Abc}}
+          <option value="{{ . }}">{{ . }}</option>
+        {{end}}
+      </select>
       <button type="submit">Registration</button>
     </form>
     <a href="/login">Login</a>

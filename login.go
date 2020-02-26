@@ -7,10 +7,6 @@ import(
   "html/template"
 )
 
-type Page struct{
-  Username string
-}
-
 func login(w http.ResponseWriter, r *http.Request) {
   if r.Method == "POST"{
     user := pupil{}

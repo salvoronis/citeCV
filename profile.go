@@ -9,7 +9,7 @@ import(
 )
 
 type Profile struct {
-  Username, Mail, File string
+  Username, Mail, File, Class string
   Confirm, Edit bool
 }
 
@@ -46,7 +46,7 @@ func profile(w http.ResponseWriter, r *http.Request){
     }
     edit := object.Username == session.Values["user"].(*pupil).Username
 
-    t.Execute(w, &Profile{Username: object.Username, Mail: object.Mail, File: file, Confirm: conf, Edit: edit})
+    t.Execute(w, &Profile{Username: object.Username, Mail: object.Mail, File: file, Confirm: conf, Edit: edit, Class: object.Class})
   } else {
     f, _, err := r.FormFile("file")
     if err != nil {
