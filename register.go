@@ -5,8 +5,6 @@ import(
   "net/http"
   _ "github.com/lib/pq"
   "html/template"
-  "net/smtp"
-  "log"
 )
 
 type Classes struct{
@@ -20,7 +18,9 @@ type Page struct{
 
 func register(w http.ResponseWriter, r *http.Request){
   if r.Method == "GET"{
-    //page := Page{}
+    session, _ := store.Get(r, "cookie-name")
+    session.Values["authenticated"] = false
+    session.Save(r, w)
     var cl []string
     classes := Classes{}
     rows, err := db.Query("select class from \"timetable\" group by class;")
@@ -33,13 +33,10 @@ func register(w http.ResponseWriter, r *http.Request){
         fmt.Println(err)
       }
       cl = append(cl, classes.Class)
-      //page.Abc.append(classes.Class)
-      //fmt.Println(page.Abc)
     }
     t := template.Must(template.ParseFiles("pages/register.html"))
     t.Execute(w, &Page{Abc: cl})
   }else if r.Method == "POST" {
-    //t := template.Must(template.ParseFiles("pages/register.html"))
     user := pupil{}
 
     err := r.ParseMultipartForm(1024)
@@ -68,13 +65,13 @@ func register(w http.ResponseWriter, r *http.Request){
     if err != nil {
       fmt.Println("can not insert into the table")
     }
-    go sendMail(r.FormValue("mail"), GetMd5(r.FormValue("username")))
+    go sendMail(r.FormValue("mail"), "Confirm mail" , "To confirm your email follow the link 188.120.244.137:8080/index?index="+GetMd5(r.FormValue("username")))
     http.Redirect(w,r, "/login", 301)
 
   }
 }
 
-func sendMail(to string, index string){
+/*func sendMail(to string, index string){
   from := "somecitee@gmail.com"
 	pass := "pidorasi"
 
@@ -91,4 +88,4 @@ func sendMail(to string, index string){
 		log.Printf("smtp error: %s", err)
 		return
 	}
-}
+}*/

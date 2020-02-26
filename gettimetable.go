@@ -12,6 +12,7 @@ type timetable struct{
 }
 type grade struct{
   Grade int
+  Homework string
 }
 
 func gettimetable(w http.ResponseWriter, r *http.Request){
@@ -31,12 +32,12 @@ func gettimetable(w http.ResponseWriter, r *http.Request){
       if err != nil {
         fmt.Println(err)
       }
-      gradeRow, err := db.Query("select grade from grades where username = '"+student.Username+"' and week = "+week+" and subject = '"+table.subject+"' and time = '"+table.time+"';")
+      gradeRow, err := db.Query("select grade, homework from grades where username = '"+student.Username+"' and week = "+week+" and subject = '"+table.subject+"' and time = '"+table.time+"';")
       if err != nil {
         fmt.Println("can not load class")
       } else{
         for gradeRow.Next(){
-          err := gradeRow.Scan(&mark.Grade)
+          err := gradeRow.Scan(&mark.Grade, &mark.Homework)
           if err != nil {
             fmt.Println(err)
           }
@@ -54,6 +55,7 @@ func gettimetable(w http.ResponseWriter, r *http.Request){
         <td>`+table.teacher+`</td>
         <td>`+table.weekday+`</td>
         <td>`+result+`</td>
+        <td>`+mark.Homework+`</td>
       </tr>
       `
     }

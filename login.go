@@ -40,6 +40,9 @@ func login(w http.ResponseWriter, r *http.Request) {
     session.Save(r, w)
     http.Redirect(w,r, "/login", 301)
   } else if r.Method == "GET"{
+    session, _ := store.Get(r, "cookie-name")
+    session.Values["authenticated"] = false
+    session.Save(r, w)
     t := template.Must(template.ParseFiles("pages/login.html"))
     t.Execute(w, "")
   }

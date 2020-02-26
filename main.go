@@ -1,7 +1,7 @@
 package main
 
 import (
-  "fmt"
+  //"fmt"
   "net/http"
   "database/sql"
   _ "github.com/lib/pq"
@@ -10,6 +10,8 @@ import (
 
   "github.com/gorilla/sessions"
   "encoding/gob"
+  "net/smtp"
+  "log"
 )
 
 type pupil struct{
@@ -32,17 +34,24 @@ func init(){
   gob.Register(&pupil{})
 }
 
+func sendMail(to, subject, body string){
+  from := "somecitee@gmail.com"
+	pass := "pidorasi"
 
-/*func secret(w http.ResponseWriter, r *http.Request) {
-  session, _ := store.Get(r, "cookie-name")
+	msg := "From: " + from + "\n" +
+		"To: " + to + "\n" +
+		"Subject: "+subject+"\n\n" +
+    body
 
-  if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-      http.Error(w, "Forbidden", http.StatusForbidden)
-      return
-  }
+	err := smtp.SendMail("smtp.gmail.com:587",
+		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
+		from, []string{to}, []byte(msg))
 
-  fmt.Fprintln(w, "The cake is a lie!")
-}*/
+	if err != nil {
+		log.Printf("smtp error: %s", err)
+		return
+	}
+}
 
 func GetMd5(text string) string {
   h := md5.New()
@@ -57,6 +66,7 @@ func main() {
   http.HandleFunc("/register", register)
   http.HandleFunc("/index", index)
   http.HandleFunc("/gettimetable", gettimetable)
+  http.HandleFunc("/recovery",recovery)
   http.HandleFunc("/", root)
   http.Handle("/js/",http.StripPrefix("/js/", http.FileServer(http.Dir("./scripts"))))
   http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))

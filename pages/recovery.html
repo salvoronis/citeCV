@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Password recovery</title>
+  </head>
+  <body>
+    <form action="/recovery" method="post">
+      <p>Enter username</p>
+      <input type="text" name="username">
+      {{.Error}}
+    </form>
+  </body>
+</html>
