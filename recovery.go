@@ -18,8 +18,26 @@ type PageRecovery struct{
 
 func recovery(w http.ResponseWriter, r *http.Request){
   if r.Method == "GET" {
+    if r.FormValue("password") != "" {
+      password := r.FormValue("password")
+      session, err := store.Get(r, password)
+      if err != nil {
+        fmt.Fprint(w,"stop right there your criminal scum")
+        fmt.Println(err)
+      } else {
+        login := session.Values["username"].(string)
+        _, err = db.Query("update school_users set password = '"+GetMd5(password)+"' where username = '"+login+"';")
+        if err != nil {
+          fmt.Println(err)
+        }
+        session.Options.MaxAge = 0
+        session.Save(r,w)
+        fmt.Fprint(w,"your new password is "+password)
+      }
+    } else {
       t := template.Must(template.ParseFiles("pages/recovery.html"))
       t.Execute(w,"")
+    }
   } else if r.Method == "POST" {
     user := User{}
     username := r.FormValue("username")
@@ -38,11 +56,14 @@ func recovery(w http.ResponseWriter, r *http.Request){
       t.Execute(w,&PageRecovery{Error: "No such username"})
     } else {
       password := randomPass()
-      _, err := db.Query("update school_users set password = '"+GetMd5(password)+"' where username = '"+username+"';")
+      go sendMail(user.Mail, "Password recover", "This message is enable only for 30 minutes\nto recover you password follow the link 188.120.244.137:8080/recovery?password="+password)
+      session, err := store.Get(r, password)
       if err != nil {
         fmt.Println(err)
       }
-      go sendMail(user.Mail, "Password recover", "Your new password is "+password)
+      session.Values["username"] = username
+      session.Options.MaxAge = 1800 //30 minutes
+      session.Save(r,w)
       http.Redirect(w,r, "/login", 301)
     }
   }
@@ -56,7 +77,7 @@ func randomInt() int{
 
 func randomPass() string {
   var password string
-  for i := 0;i < 30;i++ {
+  for i := 0;i < 15;i++ {
     rand := randomInt()
     Char := string('a' + byte(rand))
     password += Char
