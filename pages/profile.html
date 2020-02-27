@@ -13,9 +13,27 @@
         <input id="file" type="file" accept="image/jpeg">
       {{end}}
     </label>
+    {{if .Edit}}
+    {{.EditInfo}}
     <p>username: {{.Username}}</p>
     <p>mail: {{.Mail}}</p>
     <p>class: {{.Class}}</p>
+    <form action="/profile/edit" method="post">
+      <label for="username">Username</label>
+      <input id="username" type="text" name="username" placeholder="{{.Username}}">
+      <label for="mail">Mail</label>
+      <input id="mail" type="text" name="mail" placeholder="{{.Mail}}">
+      <label for="password">Old Password</label>
+      <input id="password" type="password" name="old">
+      <label for="new">New Password</label>
+      <input id="new" type="password" name="password">
+      <button type="submit" id="sendNew" name="button">Update</button>
+    </form>
+    {{else}}
+      <p>username: {{.Username}}</p>
+      <p>mail: {{.Mail}}</p>
+      <p>class: {{.Class}}</p>
+    {{end}}
     {{if .Confirm}}
       <p>Почта подтверждена</p>
     {{else}}

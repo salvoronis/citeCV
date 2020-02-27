@@ -13,11 +13,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 
     session, _ := store.Get(r, "cookie-name")
 
-    err := r.ParseMultipartForm(1024)
-    if err != nil {
-      fmt.Println(err)
-    }
-
     rows, err := db.Query("select * from school_users")
     if err != nil {
       fmt.Println("can not load rows")

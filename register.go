@@ -17,11 +17,24 @@ type Page struct{
 }
 
 func register(w http.ResponseWriter, r *http.Request){
+  var cl []string
+  classes := Classes{}
+  rows, err := db.Query("select class from \"timetable\" group by class;")
+  if err != nil {
+    fmt.Println(err)
+  }
+  for rows.Next(){
+    err := rows.Scan(&classes.Class)
+    if err != nil {
+      fmt.Println(err)
+    }
+    cl = append(cl, classes.Class)
+  }
   if r.Method == "GET"{
     session, _ := store.Get(r, "cookie-name")
     session.Values["authenticated"] = false
     session.Save(r, w)
-    var cl []string
+    /*var cl []string
     classes := Classes{}
     rows, err := db.Query("select class from \"timetable\" group by class;")
     if err != nil {
@@ -33,7 +46,7 @@ func register(w http.ResponseWriter, r *http.Request){
         fmt.Println(err)
       }
       cl = append(cl, classes.Class)
-    }
+    }*/
     t := template.Must(template.ParseFiles("pages/register.html"))
     t.Execute(w, &Page{Abc: cl})
   }else if r.Method == "POST" {
@@ -56,7 +69,7 @@ func register(w http.ResponseWriter, r *http.Request){
 
       if (user.Username == r.FormValue("username") || user.Mail == r.FormValue("mail")){
         t := template.Must(template.ParseFiles("pages/register.html"))
-        t.Execute(w, &Page{Bad: "username or mail is already use",})
+        t.Execute(w, &Page{Bad: "username or mail is already use",Abc: cl})
         return
       }
     }

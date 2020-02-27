@@ -61,6 +61,7 @@ func GetMd5(text string) string {
 
 func main() {
   http.HandleFunc("/profile", profile)
+  http.HandleFunc("/profile/edit", editUser)
   http.HandleFunc("/login", login)
   http.HandleFunc("/logout", logout)
   http.HandleFunc("/register", register)
