@@ -34,19 +34,6 @@ func register(w http.ResponseWriter, r *http.Request){
     session, _ := store.Get(r, "cookie-name")
     session.Values["authenticated"] = false
     session.Save(r, w)
-    /*var cl []string
-    classes := Classes{}
-    rows, err := db.Query("select class from \"timetable\" group by class;")
-    if err != nil {
-      fmt.Println(err)
-    }
-    for rows.Next(){
-      err := rows.Scan(&classes.Class)
-      if err != nil {
-        fmt.Println(err)
-      }
-      cl = append(cl, classes.Class)
-    }*/
     t := template.Must(template.ParseFiles("pages/register.html"))
     t.Execute(w, &Page{Abc: cl})
   }else if r.Method == "POST" {
@@ -74,31 +61,13 @@ func register(w http.ResponseWriter, r *http.Request){
       }
     }
 
-    _, err = db.Exec("insert into school_users (username, mail, password, index, class) values ('"+r.FormValue("username")+"','"+r.FormValue("mail")+"','"+GetMd5(r.FormValue("password"))+"','"+GetMd5(r.FormValue("username"))+"','"+r.FormValue("class")+"');")
+    index := randomPass()
+    _, err = db.Exec("insert into school_users (username, mail, password, index, class) values ('"+r.FormValue("username")+"','"+r.FormValue("mail")+"','"+GetMd5(r.FormValue("password"))+"','"+GetMd5(index)+"','"+r.FormValue("class")+"');")
     if err != nil {
       fmt.Println("can not insert into the table")
     }
-    go sendMail(r.FormValue("mail"), "Confirm mail" , "To confirm your email follow the link 188.120.244.137:8080/index?index="+GetMd5(r.FormValue("username")))
+    go sendMail(r.FormValue("mail"), "Confirm mail" , "To confirm your email follow the link 188.120.244.137:8080/index?index="+GetMd5(index))
     http.Redirect(w,r, "/login", 301)
 
   }
 }
-
-/*func sendMail(to string, index string){
-  from := "somecitee@gmail.com"
-	pass := "pidorasi"
-
-	msg := "From: " + from + "\n" +
-		"To: " + to + "\n" +
-		"Subject: Confirm mail\n\n" +
-    "To confirm your email follow the link 188.120.244.137:8080/index?index=" + index
-
-	err := smtp.SendMail("smtp.gmail.com:587",
-		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
-		from, []string{to}, []byte(msg))
-
-	if err != nil {
-		log.Printf("smtp error: %s", err)
-		return
-	}
-}*/

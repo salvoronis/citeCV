@@ -69,6 +69,17 @@ func editUser(w http.ResponseWriter, r *http.Request){
       }
 
       session, _ = store.Get(r, "cookie-name")
+
+      if r.FormValue("mail") != "" {
+        index := randomPass()
+        fmt.Println(session.Values["user"].(*pupil).Username)
+        _, err = db.Exec("update school_users set index = '"+GetMd5(index)+"' where username = '"+session.Values["user"].(*pupil).Username+"';")
+        if err != nil {
+          fmt.Println("can not insert into the table")
+        }
+        go sendMail(r.FormValue("mail"), "Confirm mail" , "To confirm your email follow the link 188.120.244.137:8080/index?index="+GetMd5(index))
+      }
+
       forProfile = "ok"
       http.Redirect(w,r, "/profile?name="+session.Values["user"].(*pupil).Username, 301)
     } else {
