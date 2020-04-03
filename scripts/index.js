@@ -70,16 +70,17 @@ $("#next").click(function(){
   timetable(week)
   $("#weekn").html(week)
 });
-
+var offset = 0;
 $("#getNews").click(getNews);
 function getNews(){
   $.ajax({
     url: '/news',
     dataType: 'text',
-    data: {"start" : 10},
+    data: {"offset" : offset},
     type: 'post',
     success: function(response){
       $("#news").append(response);
+      offset += 10;
     }
   });
 }

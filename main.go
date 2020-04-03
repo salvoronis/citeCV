@@ -75,6 +75,7 @@ func main() {
   http.HandleFunc("/index", index)
   http.HandleFunc("/gettimetable", gettimetable)
   http.HandleFunc("/recovery",recovery)
+  http.HandleFunc("/addNews",addNews)
   http.HandleFunc("/", root)
 
 

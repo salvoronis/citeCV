@@ -7,6 +7,7 @@ import (
   "text/template"
   "bytes"
   "github.com/lib/pq"
+  //"strconv"
 )
 
 type news struct{
@@ -21,7 +22,7 @@ func newss(w http.ResponseWriter, r *http.Request){
   var newOne = `
     <div class="blog-card">
       <div class="meta">
-        <div class="photo" style="background-image: url(http://localhost:8080/img/newsimg/{{index .Images 0}})"></div>
+        <div class="photo" style="background-image: url(/img/newsimg/{{index .Images 0}})"></div>
         <ul class="details">
           <li class="author"><a href="#">{{.Author}}</a></li>
           <li class="date">{{.Date}}</li>
@@ -47,9 +48,8 @@ func newss(w http.ResponseWriter, r *http.Request){
   t.Parse(newOne)
 
   if r.Method == "POST"{
-    //var result string
     result := new(bytes.Buffer)
-    rows, err := db.Query("select * from news offset 0 rows fetch next 10 rows only;")
+    rows, err := db.Query("select * from news offset "+r.FormValue("offset")+" rows fetch next 10 rows only;")
     if err != nil {
       fmt.Println("can not load rows")
     }
@@ -63,7 +63,6 @@ func newss(w http.ResponseWriter, r *http.Request){
       }
     }
     fmt.Fprint(w,result)
-    //267
   }
 }
 

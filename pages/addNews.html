@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>add news</title>
+  </head>
+  <body>
+    <form action="/addNews" method="post" enctype="multipart/form-data">
+      <label for="title">Title</label>
+      <input id="title" type="text" name="title">
+      <label for="subtitle">Subtitle</label>
+      <input id="subtitle" type="text" name="subtitle">
+      <label for="tags">Author</label>
+      <p>{{.Username}}</p>
+      <label for="tags">Tags (split by space)</label>
+      <input id="tags" type="text" name="tags">
+      <label for="images">Images</label>
+      <input id="images" type="file" name="images" multiple>
+      <label for="body">Body</label>
+      <textarea id="body" name="body" rows="8" cols="80"></textarea>
+      <button type="submit" id="sendNew" name="button">Send</button>
+    </form>
+  </body>
+  <script type="text/javascript" src="/js/addNews.js"></script>
+</html>
