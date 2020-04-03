@@ -45,8 +45,6 @@ window.onload = function () {
     }
 };
 
-
-
 var shit = Math.ceil((new Date() - new Date("2019/08/30"))/(1000*60*60*24*7))
 var week = shit;
 function timetable(week){
@@ -72,3 +70,17 @@ $("#next").click(function(){
   timetable(week)
   $("#weekn").html(week)
 });
+
+$("#getNews").click(getNews);
+function getNews(){
+  $.ajax({
+    url: '/news',
+    dataType: 'text',
+    data: {"start" : 10},
+    type: 'post',
+    success: function(response){
+      $("#news").append(response);
+    }
+  });
+}
+getNews();

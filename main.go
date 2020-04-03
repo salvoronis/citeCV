@@ -67,6 +67,7 @@ func main() {
 	go hub.run()
 
   http.HandleFunc("/profile", profile)
+  http.HandleFunc("/news", newss)
   http.HandleFunc("/profile/edit", editUser)
   http.HandleFunc("/login", login)
   http.HandleFunc("/logout", logout)
