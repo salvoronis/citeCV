@@ -7,14 +7,13 @@ import (
   "text/template"
   "bytes"
   "github.com/lib/pq"
-  //"strconv"
 )
 
 type news struct{
   Id int
-  Title, Subtitle, Body, Author string
+  Title, Subtitle, Body, Author, Image string
   Date time.Time
-  Tags, Images []string
+  Tags []string
 }
 
 func newss(w http.ResponseWriter, r *http.Request){
@@ -22,9 +21,9 @@ func newss(w http.ResponseWriter, r *http.Request){
   var newOne = `
     <div class="blog-card">
       <div class="meta">
-        <div class="photo" style="background-image: url(/img/newsimg/{{index .Images 0}})"></div>
+        <div class="photo" style="background-image: url(/img/newsimg/{{.Image}})"></div>
         <ul class="details">
-          <li class="author"><a href="#">{{.Author}}</a></li>
+          <li class="author"><a href="/profile?name={{.Author}}">{{.Author}}</a></li>
           <li class="date">{{.Date}}</li>
           <li class="tags">
             <ul>
@@ -40,7 +39,7 @@ func newss(w http.ResponseWriter, r *http.Request){
         <h2>{{.Subtitle}}</h2>
         <p>{{.Body}}</p>
         <p class="read-more">
-          <a href="#">Read More</a>
+          <a href="/feed?id={{.Id}}">Read More</a>
         </p>
       </div>
     </div>
@@ -49,13 +48,13 @@ func newss(w http.ResponseWriter, r *http.Request){
 
   if r.Method == "POST"{
     result := new(bytes.Buffer)
-    rows, err := db.Query("select * from news offset "+r.FormValue("offset")+" rows fetch next 10 rows only;")
+    rows, err := db.Query("select * from news order by id asc offset "+r.FormValue("offset")+" rows fetch next 10 rows only;")
     if err != nil {
       fmt.Println("can not load rows")
     }
     for rows.Next(){
       news := news{}
-      err := rows.Scan(&news.Id, &news.Title, &news.Subtitle, &news.Body, &news.Author, &news.Date, pq.Array(&news.Tags), pq.Array(&news.Images))
+      err := rows.Scan(&news.Id, &news.Title, &news.Subtitle, &news.Body, &news.Author, &news.Date, pq.Array(&news.Tags), &news.Image)
       news.Body = cut(news.Body, 250)
       t.Execute(result, news)
       if err != nil{

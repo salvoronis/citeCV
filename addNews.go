@@ -17,7 +17,7 @@ type newsPage struct {
 
 func addNews (w http.ResponseWriter, r *http.Request){
   session, _ := store.Get(r, "cookie-name")
-  if session.Values["authenticated"] == true {
+  if session.Values["authenticated"] == true && session.Values["user"].(*pupil).Role == "teacher" {
     username := newsPage{}
     username.Username = session.Values["user"].(*pupil).Username
     if r.Method == "GET" {
@@ -29,9 +29,9 @@ func addNews (w http.ResponseWriter, r *http.Request){
       data := r.MultipartForm
       files := data.File["images"]
       images := getImg(files, w)
-      imgsql := "'"+strings.Join(images, "','")+"'"
+      imgsql := strings.Join(images, "','")
       tagsql := "'"+strings.Join(strings.Split(r.FormValue("tags"), " "), "','")+"'"
-      sql := "insert into news(title, subtitle, body, author, date, tags, images) values ('"+r.FormValue("title")+"', '"+r.FormValue("subtitle")+"', '"+r.FormValue("body")+"', '"+username.Username+"', '"+time.Now().Format(time.RFC3339)+"', ARRAY ["+tagsql+"], ARRAY ["+imgsql+"]);"
+      sql := "insert into news(title, subtitle, body, author, date, tags, images) values ('"+r.FormValue("title")+"', '"+r.FormValue("subtitle")+"', '"+r.FormValue("body")+"', '"+username.Username+"', '"+time.Now().Format(time.RFC3339)+"', ARRAY ["+tagsql+"], '"+imgsql+"');"
       _, err = db.Exec(sql)
       if err != nil {
         fmt.Println(err)
@@ -45,7 +45,6 @@ func checkErr(err error, w http.ResponseWriter){
   if err != nil {
     fmt.Fprint(w, err)
     panic(err)
-    //return
   }
 }
 

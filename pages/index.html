@@ -19,9 +19,11 @@
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
+          {{if (ge .Role "teacher")}}
           <li class="nav-item">
             <a class="nav-link" href="/addNews">addNews</a>
           </li>
+          {{end}}
           <li class="nav-item dropdown active">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               {{.Username}}

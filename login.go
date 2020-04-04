@@ -18,7 +18,7 @@ func login(w http.ResponseWriter, r *http.Request) {
       fmt.Println("can not load rows")
     }
     for rows.Next(){
-      err := rows.Scan(&user.Username, &user.Mail, &user.Password, &user.Index, &user.Class)
+      err := rows.Scan(&user.Username, &user.Mail, &user.Password, &user.Index, &user.Class, &user.Role)
       if err != nil{
         fmt.Println(err)
       }

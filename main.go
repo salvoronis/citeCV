@@ -23,6 +23,7 @@ type pupil struct{
   Password string
   Index string
   Class string
+  Role string
 }
 
 var (
@@ -76,6 +77,7 @@ func main() {
   http.HandleFunc("/gettimetable", gettimetable)
   http.HandleFunc("/recovery",recovery)
   http.HandleFunc("/addNews",addNews)
+  http.HandleFunc("/feed",feed)
   http.HandleFunc("/", root)
 
 
