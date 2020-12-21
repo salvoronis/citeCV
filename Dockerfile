@@ -2,7 +2,7 @@ FROM golang:1.14
 
 MAINTAINER Yaremko Roman <salvoronis@gmail.com>
 
-WORKDIR /home/salvoroni/someshittycite
+WORKDIR /home/salvoroni/siteCV
 COPY . .
 #COPY ./pages ./pages
 
