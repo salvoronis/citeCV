@@ -3,3 +3,5 @@
 *.gif
 images/*
 build/*
+configs.yaml
+*go.sum
