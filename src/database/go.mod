@@ -1,4 +1,4 @@
-module database
+module databaseutils
 
 go 1.15
 

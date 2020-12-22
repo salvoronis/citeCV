@@ -1,8 +1,10 @@
 package config
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
+	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
@@ -41,6 +43,18 @@ func NewConfig(path string) (conf Config) {
 	return conf
 }
 
-func GetRoot() string{
+func GetRoot() string {
 	return conf.Host+conf.Port
+}
+
+func GetDbConnStr() string {
+	tmpl, err := template.New("DBConnect").Parse("postgres://{{.Dbuser}}:{{.Dbpassword}}@{{.Dbhost}}:{{.Dbport}}/{{.Dbname}}?sslmode=disable")
+	if err != nil {
+		log.Printf("Can't parse db connection string %v\n", err)
+	}
+	var tmp bytes.Buffer
+	if err := tmpl.Execute(&tmp, conf); err != nil {
+		log.Printf("Can't execute configt into template %v\n", err)
+	}
+	return tmp.String()
 }
