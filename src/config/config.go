@@ -28,7 +28,7 @@ type Config struct {
 }
 
 func init() {
-	conf = NewConfig("../configs.yaml")
+	conf = NewConfig("./configs.yaml")
 }
 
 func NewConfig(path string) (conf Config) {

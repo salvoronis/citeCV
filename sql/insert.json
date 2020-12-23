@@ -1,0 +1,327 @@
+[
+	{
+		"Table_name": "class",
+		"Fields": [
+			{
+				"Field": "name",
+				"Type": "string",
+				"Unique": true,
+				"Max": 3,
+				"Min": 3
+			}
+		]
+	},
+	{
+		"Table_name": "student",
+		"Fields":[
+			{
+				"Field": "class",
+				"Type": "int",
+				"Dependent": "class"
+			},
+			{
+				"Field": "nickname",
+				"Type": "string",
+				"Unique": true,
+				"Max": 30
+			},
+			{
+				"Field": "password",
+				"Type": "string",
+				"Max": 64
+			},
+			{
+				"Field": "name",
+				"Type": "string",
+				"Max": 35
+			}
+		],
+		"Ratio":{
+			"Operator": "*",
+			"Number": 25
+		}
+	},
+	{
+		"Table_name": "headman",
+		"Fields":[
+			{
+				"Field": "student_id",
+				"Type": "int",
+				"Dependent": "student"
+			},
+			{
+				"Field": "class_id",
+				"Type": "int",
+				"Dependent": "class"
+			}
+		]
+	},
+	{
+		"Table_name": "teacher",
+		"Fields":[
+			{
+				"Field": "name",
+				"Type": "string",
+				"Max": 35
+			},
+			{
+				"Field": "nickname",
+				"Type": "string",
+				"Unique": true,
+				"Max": 30
+			},
+			{
+				"Field": "password",
+				"Type": "string",
+				"Min": 64,
+				"Max": 64
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 4
+		}
+	},
+	{
+		"Table_name": "class_teacher",
+		"Fields":[
+			{
+				"Field": "class_id",
+				"Type": "int",
+				"Dependent": "class"
+			},
+			{
+				"Field": "teacher_id",
+				"Type": "int",
+				"Dependent": "teacher"
+			}
+		]
+	},
+	{
+		"Table_name": "roles",
+		"Fields":[
+			{
+				"Field": "name",
+				"Type": "string",
+				"Unique": true,
+				"Options": [
+					"principal",
+					"head_teacher",
+					"teacher"
+				]
+			}
+		],
+		"Ratio": {
+			"Number": 3
+		}
+	},
+	{
+		"Table_name": "teacher_roles",
+		"Fields":[
+			{
+				"Field": "roles_id",
+				"Type": "int",
+				"Dependent": "roles"
+			},
+			{
+				"Field": "teacher_id",
+				"Type": "int",
+				"Dependent": "teacher"
+			}
+		],
+		"Ratio":{
+			"Operator": "*",
+			"Number": 4
+		}
+	},
+	{
+		"Table_name": "news",
+		"Fields": [
+			{
+				"Field": "header",
+				"Type": "string",
+				"Max": 50
+			},
+			{
+				"Field": "tags",
+				"Type": "string"
+			},
+			{
+				"Field": "body",
+				"Type": "string",
+				"Max": 100
+			},
+			{
+				"Field": "date",
+				"Type": "date"
+			}
+		]
+	},
+	{
+		"Table_name": "news_author",
+		"Fields": [
+			{
+				"Field": "teacher_id",
+				"Type": "int",
+				"Dependent": "teacher"
+			},
+			{
+				"Field": "news_id",
+				"Type": "int",
+				"Unique": true,
+				"Dependent": "news"
+			}
+		]
+	},
+	{
+		"Table_name": "subject",
+		"Fields": [
+			{
+				"Field": "name",
+				"Type": "string",
+				"Max": 50
+			},
+			{
+				"Field": "course_hours",
+				"Type": "int"
+			},
+			{
+				"Field": "credits",
+				"Type": "int"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 3
+		}
+	},
+	{
+		"Table_name": "teacher_subject",
+		"Fields": [
+			{
+				"Field": "teacher_id",
+				"Type": "int",
+				"Dependent": "teacher"
+			},
+			{
+				"Field": "subject_id",
+				"Type": "int",
+				"Dependent": "subject"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 4
+		}
+	},
+	{
+		"Table_name": "schedule",
+		"Fields": [
+			{
+				"Field": "dayoweek",
+				"Type": "string",
+				"Options": [
+					"Mon",
+					"Tue",
+					"Wed",
+					"Thu",
+					"Fri",
+					"Sat",
+					"Sun"
+				]
+			},
+			{
+				"Field": "time",
+				"Type": "string",
+				"Options": [
+					"8:30",
+					"9:25",
+					"10:20",
+					"11:15",
+					"12:10",
+					"14:00",
+					"14:55"
+				]
+			},
+			{
+				"Field": "room",
+				"Type": "int",
+				"Min": 1,
+				"Max": 399
+			},
+			{
+				"Field": "class_id",
+				"Type": "int",
+				"Dependent": "class"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 12
+		}
+	},
+	{
+		"Table_name": "schedule_of_subject",
+		"Fields": [
+			{
+				"Field": "schedule_id",
+				"Type": "int",
+				"Dependent": "schedule"
+			},
+			{
+				"Field": "subject_id",
+				"Type": "int",
+				"Dependent": "subject"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 12
+		}
+	},
+	{
+		"Table_name": "subject_of_class",
+		"Fields": [
+			{
+				"Field": "class_id",
+				"Type": "int",
+				"Dependent": "class"
+			},
+			{
+				"Field": "subject_id",
+				"Type": "int",
+				"Dependent": "subject"
+			}
+		]
+	},
+	{
+		"Table_name": "students_mark",
+		"Fields": [
+			{
+				"Field": "value",
+				"Type": "int",
+				"Min": 2,
+				"Max": 4
+			},
+			{
+				"Field": "student",
+				"Type": "int",
+				"Dependent": "student"
+			},
+			{
+				"Field": "teacher",
+				"Type": "int",
+				"Dependent": "teacher"
+			},
+			{
+				"Field": "subject",
+				"Type": "int",
+				"Dependent": "subject"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 30
+		}
+	}
+]

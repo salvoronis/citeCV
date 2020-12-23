@@ -11,4 +11,5 @@ drop table if exists 	class,
 			teacher_subject,
 			schedule,
 			schedule_of_subject,
-			subject_of_class;
+			subject_of_class,
+			student_mark;

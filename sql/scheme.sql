@@ -73,10 +73,18 @@ create table schedule (
 
 create table schedule_of_subject (
 	schedule_id	integer references schedule(schedule_id) on delete cascade on update cascade,
-	subject		integer references subject(subject_id) on delete cascade on update cascade
+	subject_id	integer references subject(subject_id) on delete cascade on update cascade
 );
 
 create table subject_of_class (
 	class_id	integer references class(class_id) on delete cascade on update cascade,
 	subject_id	integer references subject(subject_id) on delete cascade on update cascade
+);
+
+create table students_mark (
+	mark_id		serial primary key,
+	value		integer,
+	student		integer references student(student_id) on delete cascade on update cascade,
+	teacher		integer references teacher(teacher_id) on delete cascade on update cascade,
+	subject		integer references subject(subject_id) on delete cascade on update cascade
 );

@@ -5,3 +5,5 @@ images/*
 build/*
 configs.yaml
 *go.sum
+sql/insert.sql
+sql/inserts.sql
