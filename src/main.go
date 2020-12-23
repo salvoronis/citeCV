@@ -5,11 +5,15 @@ import (
 	"handlers"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/sessions"
 )
 
 func main() {
+	store := sessions.NewCookieStore([]byte("I'll change it later"))
+
 	handleDirs()
-	http.Handle("/", handlers.GetServerRouters())
+	http.Handle("/", handlers.GetServerRouters(store))
 
 	log.Printf("Listening to %s\n",config.GetRoot())
 	http.ListenAndServe(config.GetRoot(), nil)

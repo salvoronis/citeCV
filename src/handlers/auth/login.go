@@ -1,12 +1,23 @@
 package auth
 
 import (
+	"databaseutils"
 	"fmt"
 	"net/http"
-	"databaseutils"
+
+	"github.com/gorilla/sessions"
 )
 
-func Login(res http.ResponseWriter, req *http.Request) {
+var (
+	storeL *sessions.CookieStore
+)
+
+func login(res http.ResponseWriter, req *http.Request) {
 	_ = databaseutils.GetDB()
 	fmt.Fprintf(res, "It is fucking fantastic, when you make a well archetected programm")
+}
+
+func NewLogin(storeS *sessions.CookieStore) func(http.ResponseWriter, *http.Request) {
+	storeL = storeS
+	return login
 }

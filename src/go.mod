@@ -12,6 +12,8 @@ replace auth => ./handlers/auth
 
 replace databaseutils => ./database
 
+replace models => ./models
+
 require (
 	auth v0.0.0
 	config v0.0.0
@@ -21,4 +23,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 	handlers v0.0.0
 	root v0.0.0
+	models v0.0.0
 )
