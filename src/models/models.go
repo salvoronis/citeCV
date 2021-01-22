@@ -3,9 +3,8 @@ package models
 type Student struct {
 	Username	string
 	Name		string
-	//Mail		string
 	Password	string
-	ID		string
+	ID		int
 	Class		string
 }
 

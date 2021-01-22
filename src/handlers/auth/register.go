@@ -70,6 +70,7 @@ func register(res http.ResponseWriter, req *http.Request){
 
 		databaseutils.SaveStudent(student)
 
+		student.Password = ""
 		session.Values["user"] = student
 		session.Values["authenticated"] = true
 		session.Save(req, res)

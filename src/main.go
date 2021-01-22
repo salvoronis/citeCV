@@ -5,9 +5,15 @@ import (
 	"handlers"
 	"log"
 	"net/http"
+	"encoding/gob"
+	"models"
 
 	"github.com/gorilla/sessions"
 )
+
+func init(){
+	gob.Register(models.Student{})
+}
 
 func main() {
 	store := sessions.NewCookieStore([]byte("I'll change it later"))
