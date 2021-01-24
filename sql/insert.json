@@ -6,21 +6,38 @@
 				"Field": "name",
 				"Type": "string",
 				"Unique": true,
-				"Max": 3,
+				"Max": 4,
 				"Min": 3
 			}
 		]
 	},
 	{
-		"Table_name": "student",
+		"Table_name": "roles",
+		"Fields":
+		[
+			{
+				"Field": "name",
+				"Type": "string",
+				"Unique": true,
+				"Options":
+				[
+					"principal",
+					"head_teacher",
+					"teacher",
+					"student"
+				]
+			}
+		],
+		"Ratio": {
+			"Operator": "-",
+			"Number": 6
+		}
+	},
+	{
+		"Table_name": "member",
 		"Fields":[
 			{
-				"Field": "class",
-				"Type": "int",
-				"Dependent": "class"
-			},
-			{
-				"Field": "nickname",
+				"Field": "login",
 				"Type": "string",
 				"Unique": true,
 				"Max": 30
@@ -31,9 +48,20 @@
 				"Max": 64
 			},
 			{
-				"Field": "name",
+				"Field": "firstname",
 				"Type": "string",
-				"Max": 35
+				"Max": 25
+			},
+			{
+				"Field": "secondname",
+				"Type": "string",
+				"Max": 25
+			},
+			{
+				"Field": "email",
+				"Type": "string",
+				"Unique": true,
+				"Max": 50
 			}
 		],
 		"Ratio":{
@@ -47,7 +75,7 @@
 			{
 				"Field": "student_id",
 				"Type": "int",
-				"Dependent": "student"
+				"Dependent": "member"
 			},
 			{
 				"Field": "class_id",
@@ -55,32 +83,6 @@
 				"Dependent": "class"
 			}
 		]
-	},
-	{
-		"Table_name": "teacher",
-		"Fields":[
-			{
-				"Field": "name",
-				"Type": "string",
-				"Max": 35
-			},
-			{
-				"Field": "nickname",
-				"Type": "string",
-				"Unique": true,
-				"Max": 30
-			},
-			{
-				"Field": "password",
-				"Type": "string",
-				"Min": 64,
-				"Max": 64
-			}
-		],
-		"Ratio": {
-			"Operator": "*",
-			"Number": 4
-		}
 	},
 	{
 		"Table_name": "class_teacher",
@@ -93,40 +95,22 @@
 			{
 				"Field": "teacher_id",
 				"Type": "int",
-				"Dependent": "teacher"
+				"Dependent": "member"
 			}
 		]
 	},
 	{
-		"Table_name": "roles",
+		"Table_name": "user_roles",
 		"Fields":[
 			{
-				"Field": "name",
-				"Type": "string",
-				"Unique": true,
-				"Options": [
-					"principal",
-					"head_teacher",
-					"teacher"
-				]
-			}
-		],
-		"Ratio": {
-			"Number": 3
-		}
-	},
-	{
-		"Table_name": "teacher_roles",
-		"Fields":[
-			{
-				"Field": "roles_id",
+				"Field": "role_id",
 				"Type": "int",
 				"Dependent": "roles"
 			},
 			{
-				"Field": "teacher_id",
+				"Field": "user_id",
 				"Type": "int",
-				"Dependent": "teacher"
+				"Dependent": "member"
 			}
 		],
 		"Ratio":{
@@ -143,10 +127,6 @@
 				"Max": 50
 			},
 			{
-				"Field": "tags",
-				"Type": "string"
-			},
-			{
 				"Field": "body",
 				"Type": "string",
 				"Max": 100
@@ -161,14 +141,13 @@
 		"Table_name": "news_author",
 		"Fields": [
 			{
-				"Field": "teacher_id",
+				"Field": "author_id",
 				"Type": "int",
-				"Dependent": "teacher"
+				"Dependent": "member"
 			},
 			{
 				"Field": "news_id",
 				"Type": "int",
-				"Unique": true,
 				"Dependent": "news"
 			}
 		]
@@ -179,14 +158,11 @@
 			{
 				"Field": "name",
 				"Type": "string",
-				"Max": 50
+				"Unique": true,
+				"Max": 25
 			},
 			{
 				"Field": "course_hours",
-				"Type": "int"
-			},
-			{
-				"Field": "credits",
 				"Type": "int"
 			}
 		],
@@ -201,7 +177,7 @@
 			{
 				"Field": "teacher_id",
 				"Type": "int",
-				"Dependent": "teacher"
+				"Dependent": "member"
 			},
 			{
 				"Field": "subject_id",
@@ -261,7 +237,7 @@
 		}
 	},
 	{
-		"Table_name": "schedule_of_subject",
+		"Table_name": "subject_schedule",
 		"Fields": [
 			{
 				"Field": "schedule_id",
@@ -280,7 +256,7 @@
 		}
 	},
 	{
-		"Table_name": "subject_of_class",
+		"Table_name": "subject_class",
 		"Fields": [
 			{
 				"Field": "class_id",
@@ -295,26 +271,28 @@
 		]
 	},
 	{
-		"Table_name": "students_mark",
+		"Table_name": "student_mark",
 		"Fields": [
 			{
-				"Field": "value",
+				"Field": "mark",
 				"Type": "int",
 				"Min": 2,
-				"Max": 4
+				"Max": 5
 			},
 			{
-				"Field": "student",
+				"Field": "student_id",
 				"Type": "int",
-				"Dependent": "student"
+				"Dependent": "member",
+				"NotEqualID": "members"
 			},
 			{
-				"Field": "teacher",
+				"Field": "teacher_id",
 				"Type": "int",
-				"Dependent": "teacher"
+				"Dependent": "member",
+				"NotEqualID": "members"
 			},
 			{
-				"Field": "subject",
+				"Field": "subject_id",
 				"Type": "int",
 				"Dependent": "subject"
 			}
@@ -322,6 +300,26 @@
 		"Ratio": {
 			"Operator": "*",
 			"Number": 30
+		}
+	},
+	{
+		"Table_name": "class_user",
+		"Fields": [
+			{
+				"Field": "student_id",
+				"Type": "int",
+				"Unique": true,
+				"Dependent": "member"
+			},
+			{
+				"Field": "class_id",
+				"Type": "int",
+				"Dependent": "class"
+			}
+		],
+		"Ratio": {
+			"Operator": "*",
+			"Number": 20
 		}
 	}
 ]
