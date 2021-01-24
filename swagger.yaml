@@ -1,0 +1,317 @@
+swagger: "2.0"
+info:
+  description: "Сайт школьной системы (ну почти), в котором есть базовый функционал + возсожно регистрация, чего на настоящем сайте школьной системы нельзя, сделано это для возможности использования сайта"
+  version: "alpha 1"
+  title: "siteCV"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "salvoronis@gmail.com"
+  license:
+    name: "тут будет лицензия"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/"
+tags:
+- name: "auth"
+  description: "Регистрация и авторизация"
+- name: "school"
+  description: "информация о школе"
+- name: "user"
+  description: "работа с пользователем"
+- name: "email"
+  description: "работа с почтой"
+schemes:
+- "http"
+paths:
+  /auth/login:
+    post:
+      tags:
+      - "auth"
+      summary: "вход на сайт"
+      description: ""
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Pet object that needs to be added to the store"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Token"
+  /auth/register:
+    post:
+      tags:
+      - "auth"
+      summary: "регистрация нового студента (учителей и тд нельзя регистрировать)"
+      description: "регистрация"
+      operationId: "register"
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            $ref: "#/definitions/Token"
+
+  /school/classes:
+    get:
+      tags:
+      - "school"
+      summary: "получить список классов"
+      operationId: "getClasses"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Classes"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /school/schedule/{week}/{student_id}:
+    get:
+      tags:
+      - "school"
+      summary: "получить расписание занятий с оценками по id ученика"
+      operationId: "getSchedule"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "student_id"
+        in: "path"
+        description: "student id"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "week"
+        in: "path"
+        description: "number of week"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Schedule"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /school/news/{page}:
+    get:
+      tags:
+      - "school"
+      summary: "получить новости"
+      operationId: "getNews"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "path"
+        description: "указатель на страницу по которому на беке будет считаться offset"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/News"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /school/news:
+    post:
+      tags:
+      - "school"
+      summary: "загрузить новость"
+      operationId: "uploadNews"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/News"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /user/update:
+    post:
+      tags:
+      - "user"
+      summary: "обновить информацию о пользователе"
+      parameters:
+      - name: "body"
+        in: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /email/{mail}/{token}:
+    post:
+      tags:
+      - "email"
+      summary: "подтверждение почты"
+      parameters:
+      - name: "mail"
+        in: "path"
+        required: true
+        type: "integer"
+      - name: "token"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+
+securityDefinitions:
+  school_auth:
+    type: "oauth2"
+    authorizationUrl: "localhost:8080/register"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+
+definitions:
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+        example: 200
+      type:
+        type: "string"
+        example: "OK"
+      message:
+        type: "string"
+        example: "All OK. keep working."
+  Login:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "salvoroni"
+      password:
+        type: "string"
+        example: "qwerty"
+  Token:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+      status:
+        $ref: "#/definitions/ApiResponse"
+  User:
+    type: "object"
+    properties:
+      nickname:
+        type: "string"
+        example: "salvoroni"
+      password:
+        type: "string"
+        example: "qwerty"
+      class:
+        type: "integer"
+        example: 1
+        description: "class id > 0"
+      firstName:
+        type: "string"
+        example: "Danil"
+      secondName:
+        type: "string"
+        example: "Dickens"
+      termOfUse:
+        type: "boolean"
+        default: false
+      email:
+        type: "string"
+        example: "danilDick@mail.ru"
+  Classes:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      name:
+        type: "string"
+        example: "11 A"
+  Schedule:
+    type: "object"
+    properties:
+      subject:
+        type: "string"
+        example: "Math"
+      dayOweek:
+        type: "string"
+        example: "Friday"
+      mark:
+        type: "integer"
+        example: 4
+      time:
+        type: "string"
+        example: "8-20"
+      teacher:
+        type: "string"
+        example: "Мария Ивановна"
+  News:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+        example: "weeeweee"
+      body:
+        type: "string"
+        example: "a lot of text"
+      author:
+        type: "string"
+        example: "Danil Dickens"
+      author_id:
+        type: "integer"
+        example: 123
+      date:
+        type: "string"
+        example: "21.12.2021"
