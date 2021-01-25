@@ -6,14 +6,16 @@ import (
 	"log"
 	"utils"
 	"config"
-	"controllers"
+	"controllers/auth"
+	"controllers/school"
 )
 
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/auth/login", controllers.Login).Methods("POST")
-	router.HandleFunc("/auth/register", controllers.Register).Methods("POST")
+	router.HandleFunc("/auth/login", auth.Login).Methods("POST")
+	router.HandleFunc("/auth/register", auth.Register).Methods("POST")
+	router.HandleFunc("/school/classes", school.GetClasses).Methods("GET")
 
 	router.Use(utils.JwtAuth)
 

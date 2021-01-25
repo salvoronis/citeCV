@@ -50,10 +50,24 @@ func SaveUser(user models.User) error {
 		user.Email,
 	)
 
+	usr, err := GetUserByLogin(user.Login)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+
+	_, err = db.
+	ExecContext(
+		ctx,
+		"insert into class_user(student_id, class_id) values ($1, $2)",
+		usr.Id,
+		user.Class,
+	)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
 	return nil
 }
 
@@ -69,4 +83,24 @@ func GetUserByLogin(login string) (models.User,error) {
 			&user.Email,
 		)
 	return user, nil
+}
+
+func GetClasses() []models.Class {
+	result := []models.Class{}
+	rows, err := db.QueryContext(ctx, "select c.classId, c.name from class as c")
+	if err != nil {
+		log.Printf("Can't get classes %v\n",err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		tmp := models.Class{}
+		err := rows.Scan(&tmp.Id, &tmp.Name)
+		if err != nil {
+			log.Printf("Can't scan row")
+			continue
+		}
+		result = append(result, tmp)
+	}
+	return result
 }
