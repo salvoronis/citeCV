@@ -45,6 +45,10 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Token"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ApiResponse"
   /auth/register:
     post:
       tags:
@@ -232,7 +236,7 @@ definitions:
   Login:
     type: "object"
     properties:
-      username:
+      login:
         type: "string"
         example: "salvoroni"
       password:
@@ -248,7 +252,7 @@ definitions:
   User:
     type: "object"
     properties:
-      nickname:
+      login:
         type: "string"
         example: "salvoroni"
       password:

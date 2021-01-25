@@ -12,7 +12,8 @@ import (
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/auth/test", controllers.Test).Methods("GET")
+	router.HandleFunc("/auth/login", controllers.Login).Methods("POST")
+	router.HandleFunc("/auth/register", controllers.Register).Methods("POST")
 
 	router.Use(utils.JwtAuth)
 

@@ -22,50 +22,51 @@ func init() {
 		log.Printf("Can't connect to database %v\n", err)
 	}
 	db = dbtmp
-	log.Println("Connected sucsessfully to database (but don't hope too much, it still can fall :) )")
+	log.Println("Connected sucsessfully to database (but don't hope too much, it still can fall )")
 }
 
-func GetDB() *sql.DB {
-	return db
-}
+//func GetDB() *sql.DB {
+//	return db
+//}
 
-func GetClasses() []models.Class {
-	result := []models.Class{}
-	rows, err := db.QueryContext(ctx, "select c.class_id, c.name from class as c")
-	if err != nil {
-		log.Printf("Can't get classes %v\n",err)
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		tmp := models.Class{}
-		err := rows.Scan(&tmp.Id, &tmp.Name)
-		if err != nil {
-			log.Printf("Can't scan row")
-			continue
-		}
-		result = append(result, tmp)
-	}
-	return result
-}
-
-func SaveStudent(student models.Student) error {
-	_, err := db.ExecContext(ctx, "insert into student(class, nickname, password, name) values ($1,$2,$3,$4)", student.Class, student.Username, student.Password, student.Name)
-	if err != nil {
-		log.Printf("Can't insert student to db %v\n",err)
-	}
-	return err
-}
-
-func CheckStudent(nickname, password string) bool {
+func CheckUser(login, password string) (bool, uint) {
 	var tmp string
-	db.QueryRowContext(ctx, "select password from student where nickname = $1", nickname).Scan(&tmp)
+	var id uint
+	db.QueryRowContext(ctx, "select password, userId from member where login = $1", login).
+		Scan(&tmp,&id)
 	password = utils.GetSHA256(password)
-	return tmp == password
+	return tmp == password, id
 }
 
-func GetStudentByNickname(nickname string) models.Student {
-	var student models.Student
-	db.QueryRowContext(ctx, "select s.student_id, s.nickname, s.name, c.name as class from student as s join class as c on s.class = c.class_id where s.name = $1", nickname).Scan(&student.ID, &student.Username, &student.Name, &student.Class)
-	return student
+func SaveUser(user models.User) error {
+	_, err := db.
+	ExecContext(
+		ctx,
+		"insert into member(login,password,firstname,secondname,email) values ($1,$2,$3,$4,$5)",
+		user.Login,
+		utils.GetSHA256(user.Password),
+		user.FirstName,
+		user.SecondName,
+		user.Email,
+	)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func GetUserByLogin(login string) (models.User,error) {
+	var user models.User
+	db.QueryRowContext(ctx, "select * from member where login = $1", login).
+		Scan(
+			&user.Id,
+			&user.Login,
+			&user.Password,
+			&user.FirstName,
+			&user.SecondName,
+			&user.Email,
+		)
+	return user, nil
 }

@@ -25,6 +25,7 @@ type Config struct {
 	Pass		string `yaml:"pass"`
 	Smtp		string `yaml:"smtp"`
 	Smtpport	string `yaml:"smtpport"`
+	JwtSecret	string `yaml:"secret"`
 }
 
 func init() {
@@ -57,4 +58,8 @@ func GetDbConnStr() string {
 		log.Printf("Can't execute configt into template %v\n", err)
 	}
 	return tmp.String()
+}
+
+func GetSecret() string {
+	return conf.JwtSecret
 }
