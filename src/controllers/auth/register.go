@@ -25,10 +25,18 @@ func Register(w http.ResponseWriter, r *http.Request){
 
 	databaseutils.SaveUser(*user)
 
+	err = databaseutils.SetVal(user.Email, utils.RandomStr(35))
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		utils.Respond(w, utils.Message(403, "Forbidden", "Can't set email token"))
+		return
+	}
+
 	tmp, err := databaseutils.GetUserByLogin(user.Login)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		utils.Respond(w, utils.Message(403, "Forbidden", "Can't find ID"))
+		return
 	}
 
 	response := make(map[string]interface{})

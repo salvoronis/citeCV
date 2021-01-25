@@ -16,7 +16,7 @@ type Token struct {
 
 var JwtAuth = func(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		notAuth := []string{"/auth/login", "/auth/register"}
+		notAuth := []string{"/auth/login", "/auth/register", "/school/classes"}
 		reqPath := r.URL.Path
 
 		for _, val := range notAuth {

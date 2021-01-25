@@ -19,6 +19,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/lib/pq v1.9.0 // indirect
+	github.com/mediocregopher/radix/v3 v3.7.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	models v0.0.0
 	utils v0.0.0
