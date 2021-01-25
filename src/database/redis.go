@@ -2,6 +2,7 @@ package databaseutils
 
 import (
 	"log"
+	"config"
 
 	radix "github.com/mediocregopher/radix/v3"
 )
@@ -12,7 +13,7 @@ var (
 
 func init() {
 	var err error
-	redisCli, err = radix.NewPool("tcp", "127.0.0.1:6379", 10)
+	redisCli, err = radix.NewPool("tcp", config.GetRedisAddr(), 10)
 	if err != nil {
 		log.Println(err)
 	}

@@ -26,6 +26,7 @@ type Config struct {
 	Smtp		string `yaml:"smtp"`
 	Smtpport	string `yaml:"smtpport"`
 	JwtSecret	string `yaml:"secret"`
+	RedisAddr	string `yaml:"redisaddr"`
 }
 
 func init() {
@@ -62,4 +63,8 @@ func GetDbConnStr() string {
 
 func GetSecret() string {
 	return conf.JwtSecret
+}
+
+func GetRedisAddr() string {
+	return conf.RedisAddr
 }
