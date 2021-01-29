@@ -229,14 +229,6 @@
 				"Field": "class_id",
 				"Type": "int",
 				"Dependent": "class"
-			},
-			{
-				"Field": "mark_date",
-				"Type": "date"
-			},
-			{
-				"Field": "stud_date",
-				"Type": "date"
 			}
 		],
 		"Ratio": {
@@ -303,6 +295,14 @@
 				"Field": "subject_id",
 				"Type": "int",
 				"Dependent": "subject"
+			},
+			{
+				"Field": "mark_date",
+				"Type": "date"
+			},
+			{
+				"Field": "stud_date",
+				"Type": "date"
 			}
 		],
 		"Ratio": {

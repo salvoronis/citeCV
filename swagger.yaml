@@ -85,16 +85,13 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Classes"
-      security:
-      - school_auth:
-        - "write:pets"
 
-  /school/schedule/{week}/{student_id}:
+  /school/schedule/marks/{date}/{student_id}:
     get:
       tags:
       - "school"
-      summary: "получить расписание занятий с оценками по id ученика"
-      operationId: "getSchedule"
+      summary: "получить оценки за неделю по id ученика"
+      operationId: "getMarks"
       produces:
       - "application/json"
       parameters:
@@ -104,9 +101,34 @@ paths:
         required: true
         type: "integer"
         format: "int64"
-      - name: "week"
+      - name: "date"
         in: "path"
-        description: "number of week"
+        description: "start week date"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "запрос обработан"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Marks"
+      security:
+      - school_auth:
+        - "write:pets"
+
+  /school/schedule/{class_id}:
+    get:
+      tags:
+      - "school"
+      summary: "получить расписание занятий в классе"
+      operationId: "getSchedule"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "class_id"
+        in: "path"
+        description: "class id"
         required: true
         type: "integer"
       responses:
@@ -286,21 +308,45 @@ definitions:
   Schedule:
     type: "object"
     properties:
-      subject:
+      classname:
         type: "string"
-        example: "Math"
+        example: "11 A"
       dayOweek:
         type: "string"
         example: "Friday"
-      mark:
-        type: "integer"
-        example: 4
-      time:
+      lessonTime:
         type: "string"
         example: "8-20"
-      teacher:
+      room:
+        type: "integer"
+        example: 502
+      subject:
         type: "string"
-        example: "Мария Ивановна"
+        example: "Math"
+      t_login:
+        type: "string"
+        example: "cozy123"
+      t_fname:
+        type: "string"
+        example: "Ivanka"
+      t_sname:
+        type: "string"
+        example: "Ivanova"
+  Marks:
+    type: "object"
+    properties:
+      dayOweek:
+        type: "string"
+        example: "Friday"
+      les_time:
+        type: "string"
+        example: "8-20"
+      subject:
+        type: "string"
+        example: "Math"
+      mark:
+        type: "integer"
+        example: 5
   News:
     type: "object"
     properties:

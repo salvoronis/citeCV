@@ -70,7 +70,9 @@ create table student_mark (
 	student_id integer references member(userId) on delete cascade on update cascade,
 	teacher_id integer references member(userId) on delete cascade on update cascade check (student_id != teacher_id),
 	mark integer not null,
-	subject_id integer references subject(subjectId) on delete cascade on update cascade
+	subject_id integer references subject(subjectId) on delete cascade on update cascade,
+	mark_date date,
+	stud_date date not null
 );
 
 create table schedule (
@@ -78,9 +80,7 @@ create table schedule (
 	class_id integer references class(classId) on delete cascade on update cascade,
 	dayoweek varchar(10) not null,
 	time time not null,
-	room integer not null,
-	mark_date date,
-	stud_date date not null
+	room integer not null
 );
 
 create table subject_schedule(
