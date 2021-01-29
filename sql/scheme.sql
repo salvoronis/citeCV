@@ -77,8 +77,10 @@ create table schedule (
 	scheduleId serial primary key,
 	class_id integer references class(classId) on delete cascade on update cascade,
 	dayoweek varchar(10) not null,
-	time varchar(5) not null,
-	room integer not null
+	time time not null,
+	room integer not null,
+	mark_date date,
+	stud_date date not null
 );
 
 create table subject_schedule(

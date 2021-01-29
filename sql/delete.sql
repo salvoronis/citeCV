@@ -13,3 +13,5 @@ drop table if exists 	subject_schedule,
 			user_roles,
 			roles,
 			member cascade;
+
+drop function if exists get_schedule_marks(classid int, studentid int) cascade;
