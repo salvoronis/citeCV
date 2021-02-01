@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"log"
 	"models"
+	"time"
 	"utils"
 
 	_ "github.com/lib/pq"
@@ -98,6 +99,67 @@ func GetClasses() []models.Class {
 		err := rows.Scan(&tmp.Id, &tmp.Name)
 		if err != nil {
 			log.Printf("Can't scan row")
+			continue
+		}
+		result = append(result, tmp)
+	}
+	return result
+}
+
+func GetMarks(studentId int, from time.Time, to time.Time) []models.Marks {
+	result := []models.Marks{}
+	rows, err := db.QueryContext(ctx, "select * from get_schedule_marks($1, $2, $3)",
+		studentId,
+		from,
+		to,
+	)
+	if err != nil {
+		log.Printf("Can't get marks %v\n", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		tmp := models.Marks{}
+		err := rows.Scan(
+			&tmp.DayOweek,
+			&tmp.LessonTime,
+			&tmp.Room,
+			&tmp.Subject,
+			&tmp.Mark,
+		)
+		if err != nil {
+			log.Printf("Cant scan rows")
+			continue
+		}
+		result = append(result, tmp)
+	}
+	return result
+}
+
+func GetSchedule(classId int) []models.Schedule {
+	result := []models.Schedule{}
+	rows, err := db.QueryContext(ctx, "select * from get_schedule_by_class( $1 )",
+		classId,
+	)
+	if err != nil {
+		log.Printf("Can't get schedule %v\n", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		tmp := models.Schedule{}
+		err := rows.Scan(
+			&tmp.ClassName,
+			&tmp.DayOweek,
+			&tmp.LessonTime,
+			&tmp.Room,
+			&tmp.Subject,
+			&tmp.TeacherLogin,
+			&tmp.TeacherFName,
+			&tmp.TeacherSName,
+		)
+		if err != nil {
+			log.Printf("Cant scan rows schedule")
 			continue
 		}
 		result = append(result, tmp)

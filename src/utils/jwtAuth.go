@@ -26,6 +26,8 @@ var JwtAuth = func(next http.Handler) http.Handler {
 			}
 		}
 
+		log.Printf("Required authorization")
+
 		response := make(map[string]interface{})
 		tokenHead := r.Header.Get("Authorization")
 

@@ -24,17 +24,17 @@ func GetSHA256(secret string) string {
 }
 
 func RandomStr(length int) string {
-  var password string
-  for i := 0;i < length;i++ {
-    rand := randomInt()
-    Char := string('a' + byte(rand))
-    password += Char
-  }
-  return password
+	var password string
+	for i := 0;i < length;i++ {
+		rand := randomInt()
+		Char := string('a' + byte(rand))
+		password += Char
+	}
+	return password
 }
 
 func randomInt() int{
-  rand.Seed(time.Now().UTC().UnixNano())
-  bytes := rand.Intn(26)
-  return bytes
+	rand.Seed(time.Now().UTC().UnixNano())
+	bytes := rand.Intn(26)
+	return bytes
 }
